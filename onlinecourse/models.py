@@ -12,7 +12,7 @@ import uuid
 
 # Instructor model
 class Instructor(models.Model):
-    user = models.ForeignKey(
+    user_id = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
@@ -25,7 +25,7 @@ class Instructor(models.Model):
 
 # Learner model
 class Learner(models.Model):
-    user = models.ForeignKey(
+    user_id = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
@@ -72,7 +72,7 @@ class Course(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200, default="title")
     order = models.IntegerField(default=0)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
 
 
@@ -88,8 +88,8 @@ class Enrollment(models.Model):
         (HONOR, 'Honor'),
         (BETA, 'BETA')
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     date_enrolled = models.DateField(default=now)
     mode = models.CharField(max_length=5, choices=COURSE_MODES, default=AUDIT)
     rating = models.FloatField(default=5.0)
@@ -104,6 +104,8 @@ class Enrollment(models.Model):
 class Question(models.Model):
     # Foreign key to lesson
     lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    # Foreign key to course
+    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
     # question text
     question_text = models.TextField()
     # question grade/mark
@@ -133,7 +135,8 @@ class Choice(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.TextField()
     is_correct = models.BooleanField()
+
 class Submission(models.Model):
-    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    enrollment_id = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
 #    Other fields and methods you would like to design
