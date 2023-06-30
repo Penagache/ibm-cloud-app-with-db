@@ -1,1 +1,2 @@
-hola
+git config --global user.name "Penagache"
+git config --global user.email celsoriveramartinez@gmail.com
